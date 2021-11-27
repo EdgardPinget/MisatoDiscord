@@ -22,6 +22,7 @@ async def on_message(message):
         return
 
     await perroquet(message)
+    await l33t(message)
 
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
@@ -44,6 +45,32 @@ async def perroquet(message):
             message_final = reply_start
 
         await message.channel.send(message_final)
+
+# Mettre les dictionnaires dans un fichier annexe, et permettre la gestion de plusieurs commandes de l33t
+async def l33t(message):
+
+    basic_leet = {
+      ord("a"): "4",
+      ord("A"): "4",
+      ord("e"): "3",
+      ord("E"): "3",
+      ord("i"): "1",
+      ord("I"): "1",
+      ord("o"): "0",
+      ord("O"): "0",
+      ord("s"): "5",
+      ord("S"): "5",
+      ord("g"): "6",
+      ord("G"): "6",
+      ord("t"): "7",
+      ord("T"): "7",
+      ord("v"): "\\\/",
+      ord("V"): "\\\/",
+      }
+    if message.content.startswith("!l33t"):
+      message_cut = message.content[5:]
+      message_final = message_cut.translate(basic_leet)
+      await message.channel.send(message_final)
 
 
 client.run(os.getenv('TOKEN'))
