@@ -1,5 +1,6 @@
 import discord
 import os
+from discord.ext import commands
 
 import re
 
@@ -8,25 +9,19 @@ from tools import keep_alive as ka
 
 ka.keep_alive()
 
-client = discord.Client()
+client = commands.Bot(command_prefix = '!')
 
+@client.command()
+async def load(ctx, extension):
+  client.load_extension(f'cogs.{extension}')
+
+@client.command()
+async def unload(ctx, extension):
+  client.unload_extension(f'cogs.{extension}')
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    await perroquet(message)
-    await l33t(message)
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
-
 
 async def perroquet(message):
     regex_di_start = "[dD]i[ts]?"
@@ -46,31 +41,8 @@ async def perroquet(message):
 
         await message.channel.send(message_final)
 
-# Mettre les dictionnaires dans un fichier annexe, et permettre la gestion de plusieurs commandes de l33t
-async def l33t(message):
-
-    basic_leet = {
-      ord("a"): "4",
-      ord("A"): "4",
-      ord("e"): "3",
-      ord("E"): "3",
-      ord("i"): "1",
-      ord("I"): "1",
-      ord("o"): "0",
-      ord("O"): "0",
-      ord("s"): "5",
-      ord("S"): "5",
-      ord("g"): "6",
-      ord("G"): "6",
-      ord("t"): "7",
-      ord("T"): "7",
-      ord("v"): "\\\/",
-      ord("V"): "\\\/",
-      }
-    if message.content.startswith("!l33t"):
-      message_cut = message.content[5:]
-      message_final = message_cut.translate(basic_leet)
-      await message.channel.send(message_final)
-
+for filename in os.listdir('./cogs'):
+  if filename.endswith('.py'):
+    client.load_extension(f'cogs.{filename[:-3]}')
 
 client.run(os.getenv('TOKEN'))
