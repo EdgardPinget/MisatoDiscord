@@ -9,7 +9,7 @@ class Encode(commands.Cog):
   #Events
   @commands.Cog.listener()
   async def on_ready(self):
-    print("Bot Online")
+    print("Encode Online")
     
   #Commands
   @commands.command(name="l33t")
@@ -32,7 +32,6 @@ class Encode(commands.Cog):
       ord("v"): "\\\/",
       ord("V"): "\\\/"
       }
-    print("passé")
     message_cut = arg
     message_final = message_cut.translate(basic_leet)
     
